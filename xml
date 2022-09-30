@@ -1,0 +1,111 @@
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+​
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+​
+public class ReadXML {
+​
+​
+​
+    public static void main(String[] args) throws Exception {
+        String xmlResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                "<Entities TotalResults=\"1\">" +
+                "<Entity Type=\"test-instance\">" +
+                "<ChildrenCount>" +
+                "<Value>0</Value>" +
+                "</ChildrenCount>" +
+                "<Fields>" +
+                "<Field Name = \"id\">" +
+                "<Value>954</Value>" +
+                "</Field>" +
+                "<Field Name = \"test-config-id\">" +
+                "<Value>4544</Value>" +
+                "</Field>" +
+                "<Field Name = \"test-id\">" +
+                "<Value>3544</Value>" +
+                "</Field>" +
+                "<Field Name = \"cycle-id\">" +
+                "<Value>554</Value>" +
+                "</Field>" +
+                "</Fields>" +
+                "</Entity>" +
+                "</Entities>";
+​
+        String xmlRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+                "<Entity Type=\"Run\">" +
+                "<Fields>" +
+                "<Field Name=\"test-config-id\"><Value>1111</Value></Field>" +
+                "<Field Name=\"test-id\"><Value>1111</Value></Field>" +
+                "<Field Name=\"cycle-id\"><Value>1111</Value></Field>" +
+                "<Field Name=\"test-cycl-id\"><Value>1111</Value></Field>" +
+                "</Fields>" +
+                "</Entity>";
+        Map<String, String> parameters = readXml(xmlResponse);
+        String s = updateParameter(xmlRequest, parameters);
+        System.out.println(s);
+​
+    }
+    private static String updateParameter(String xmlRequest, Map<String, String> mapResponseParams) throws Exception {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource src = new InputSource();
+        src.setCharacterStream(new StringReader(xmlRequest));
+​
+        Document doc = builder.parse(src);
+        NodeList fields = doc.getElementsByTagName("Field");
+        for (int i = 0; i < fields.getLength(); i++) {
+​
+            if(Objects.nonNull(mapResponseParams.get(fields.item(i).getAttributes().getNamedItem("Name").getTextContent()))){
+                fields.item(i).setTextContent(mapResponseParams.get(fields.item(i).getAttributes().getNamedItem("Name").getTextContent()));
+            }
+            System.out.println(fields.item(i).getAttributes().getNamedItem("Name").getTextContent());
+            System.out.println(fields.item(i).getTextContent());
+            mapResponseParams.put(fields.item(i).getAttributes().getNamedItem("Name").getTextContent(), fields.item(i).getTextContent());
+        }
+        return documentToString(doc);
+    }
+​
+    private static String documentToString(Document doc) throws Exception {
+​
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        String output = writer.getBuffer().toString();
+        return output;
+    }
+​
+    private static Map<String,String> readXml(String xmlResponse) throws IOException, SAXException, ParserConfigurationException {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        InputSource src = new InputSource();
+        src.setCharacterStream(new StringReader(xmlResponse));
+​
+        Document doc = builder.parse(src);
+        NodeList fields = doc.getElementsByTagName("Field");
+        Map<String, String> mapResponseParams = new HashMap<>();
+        for (int i = 0; i < fields.getLength(); i++) {
+            //System.out.println(fields.item(i).getAttributes().getNamedItem("Name").getTextContent());
+            //System.out.println(fields.item(i).getTextContent());
+            mapResponseParams.put(fields.item(i).getAttributes().getNamedItem("Name").getTextContent(), fields.item(i).getTextContent());
+        }
+        return mapResponseParams;
+    }
+}
