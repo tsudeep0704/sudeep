@@ -1,0 +1,129 @@
+package com.utility.executionmanagement;
+
+import org.testng.annotations.Test;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class ExecutionEnabler extends Thread implements ActionListener {
+    private JButton cancelButton, backButton, submitButton;
+    private JCheckBox testSet1;
+    private JCheckBox testSet2;
+    private JCheckBox testSet3;
+    private JFrame frame;
+
+    public void actionPerformed(ActionEvent e) {
+
+        if (testSet1.isSelected() == true)
+        {
+            System.out.println("Test Set 1 is selected");
+        }else{
+            System.out.println("Test Set 1 is not selected");
+        }
+
+        System.out.println(testSet1.isSelected() + " - " + testSet2.isSelected() + " - " + testSet3.isSelected());
+        start();
+
+    }
+
+    public ExecutionEnabler() {
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setPreferredSize(new Dimension(320, 240));
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+
+        mainPanel.add(checkBoxesPanel(), gbc);
+
+        gbc.gridy++;
+
+        mainPanel.add(buttonsPanel(), gbc);
+        frame = new JFrame("Actions");
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocation(500, 200);
+        frame.setContentPane(mainPanel);
+        frame.setVisible(true);
+        frame.pack();
+    }
+
+    /**
+     * Panel that contains the Cancel and Continue buttons
+     *
+     * @return panel
+     */
+    public JPanel buttonsPanel() {
+        JPanel buttonsPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+
+        submitButton = new JButton("Submit");
+        submitButton.addActionListener(this);
+
+        gbc.gridx++;
+
+        buttonsPanel.add(submitButton, gbc);
+
+        return buttonsPanel;
+    }
+
+    /**
+     * Panel that contains the check boxes for the types of queries
+     *
+     * @return panel
+     */
+    public JPanel checkBoxesPanel() {
+        JPanel checkBoxesPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.insets = new Insets(4, 4, 4, 4);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        testSet1 = new JCheckBox("Test Set 1", false);
+
+        checkBoxesPanel.add(testSet1, gbc);
+
+        testSet2 = new JCheckBox("Test Set 2", false);
+
+        gbc.gridy++;
+        checkBoxesPanel.add(testSet2, gbc);
+
+        testSet3 = new JCheckBox("Test Set 3", false);
+
+        gbc.gridy++;
+        checkBoxesPanel.add(testSet3, gbc);
+
+        return checkBoxesPanel;
+    }
+
+    public static void main(String[] args) {
+        new ExecutionEnabler();
+    }
+
+    public void run() {
+        System.exit(0);
+    }
+}
