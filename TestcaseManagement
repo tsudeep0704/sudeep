@@ -1,0 +1,270 @@
+Test Case Management Guide – Azure DevOps Test Plans
+How we write, review, execute, and report on test cases in ADO Test Plans.
+1. Purpose and Scope
+This document defines the standard process for authoring and executing manual and automated test cases in Azure DevOps (ADO) Test Plans. It applies to all QA team members, developers, and product owners who contribute to or consume test results.
+In scope: test plan structure, test case standards, review workflow, execution, defect logging, traceability, reporting.
+Out of scope: automation framework design, performance and security test strategy (covered in separate documents).
+2. Roles and Responsibilities
+Role
+Responsibility
+QA Lead
+Owns test plan structure, approves test cases, signs off on execution results
+QA Engineer
+Writes, maintains, and executes test cases; logs defects
+Developer
+Reviews test cases for technical accuracy; fixes defects; supports automation linkage
+Product Owner / BA
+Confirms coverage against acceptance criteria
+3. ADO Test Plan Structure
+ADO organizes testing in a three-level hierarchy:
+• Test Plan: one per release, sprint, or major initiative (e.g., Release 2026.11 – Regression)
+• Test Suite: groups of test cases within a plan. Three types are used:
+    ◦ Static suite: manually curated folder (e.g., by feature or module)
+    ◦ Requirement-based suite: auto-linked to a User Story/PBI; the preferred type for traceability
+    ◦ Query-based suite: dynamic, populated by a work item query (e.g., all Priority 1 cases tagged smoke)
+• Test Case: the individual work item with steps, expected results, and parameters
+Recommended suite layout
+Test Plan: <Release/Sprint Name>
+├── Smoke (query-based: Tag = smoke)
+├── Feature Testing
+│   ├── <User Story ID> – <Title> (requirement-based)
+│   └── ...
+├── Regression (query-based: Tag = regression)
+├── Integration / API
+└── Exploratory (charters)
+Naming conventions
+• Test Plan: <Release or Sprint> – <Type> (e.g., Sprint 42 – Feature Testing)
+• Test Suite: <Story ID> – <Story Title> for requirement-based suites
+• Test Case: <Module> | <Action> | <Condition/Expected outcome> (e.g., Login | Submit valid credentials | User lands on dashboard)
+4. Writing Test Cases
+4.1 Required fields
+Field
+Standard
+Title
+Follows naming convention above; unique and descriptive
+State
+Design → Ready → Closed (see lifecycle below)
+Assigned To
+Author while in Design; executor once Ready
+Area / Iteration Path
+Matches team area and target sprint
+Priority
+1 (critical path), 2 (important), 3 (standard), 4 (low)
+Automation Status
+Not Automated / Planned / Automated
+Tags
+smoke, regression, api, ui, negative, e2e, etc.
+Summary / Description
+Purpose of the test and business rule being verified
+Steps
+Action + Expected Result per step
+Related Work
+Linked User Story/PBI (Tested By)
+4.2 Test case lifecycle
+State
+Meaning
+Design
+Being written; not ready to execute
+Ready
+Peer-reviewed and approved for execution
+Closed
+Retired; no longer applicable
+4.3 Step-writing guidelines
+1. One action per step. Keep steps short and imperative ("Click Submit", not "The user should click Submit").
+2. Every verification gets an expected result. Mark verification steps explicitly; ADO attaches pass/fail to each step.
+3. State preconditions in the Summary, or use a Shared Step for setup (login, data seeding).
+4. Use Shared Steps for repeated flows. Update once and all linked cases inherit the change.
+5. Use Parameters (@username, @expectedMessage) with a Parameter Values table for data-driven cases instead of duplicating cases.
+6. Be specific and measurable. Avoid "works correctly"; state the exact message, value, or state.
+7. Attach supporting artifacts (sample files, screenshots, API payloads) to the test case.
+8. Keep cases independent where possible; avoid dependence on another case's outcome.
+4.4 Coverage expectations per story
+For each User Story, write at minimum:
+• Positive (happy path) case(s) for each acceptance criterion
+• Negative cases (invalid input, unauthorized access, missing data)
+• Boundary / edge cases
+• At least one regression-tagged case for core behavior
+• API / integration cases where services are involved
+4.5 Test case template
+Field
+Value
+Title
+<Module> | <Action> | <Expected outcome>
+Priority
+
+Tags
+
+Linked Story
+
+Preconditions
+
+Test Data
+
+Step
+Action
+Expected Result
+1
+
+
+2
+
+
+3
+
+
+5. Authoring and Review Workflow
+1. Story refinement: QA reviews acceptance criteria and raises gaps before the sprint starts.
+2. Create the suite: in Test Plans → Test Plans, open the plan and add a requirement-based suite for the story (or use Add existing user story).
+3. Author cases: add test cases from the suite grid or the Test Case work item form. State = Design.
+4. Link: confirm each case is linked to the story (auto-linked in requirement-based suites).
+5. Peer review: a second QA or the developer reviews for accuracy, coverage, and clarity; comments are captured on the work item Discussion.
+6. Approve: reviewer moves State to Ready. Cases in Design are excluded from execution runs.
+7. Assign: assign testers and configurations in the suite's Execute tab.
+Review checklist
+[ ] Title follows naming convention
+[ ] Linked to a story and mapped to acceptance criteria
+[ ] Steps are atomic with clear expected results
+[ ] Positive, negative, and boundary scenarios covered
+[ ] Test data and preconditions defined
+[ ] Priority, tags, and automation status set
+[ ] Shared steps and parameters used where applicable
+6. Test Configurations and Environments
+Define configurations once in Test Plans → Configurations (e.g., Chrome / Edge / Safari; Windows / macOS; iOS / Android). Assign them to suites or cases so each combination is tracked as its own test point.
+Environment
+Purpose
+Build source
+Dev
+Developer validation
+CI build on merge
+QA / Test
+Primary functional testing
+Release pipeline stage
+Staging / UAT
+Final regression and acceptance
+Pre-production stage
+Select the Build on the test plan so every run is tied to a specific build number.
+7. Executing Test Cases
+7.1 Execution steps
+1. Open Test Plans → Execute and select the plan and suite.
+2. Filter by tester, configuration, or outcome as needed.
+3. Select a test point and choose Run for web application (or Run with options to pick the build and runner).
+4. In the Test Runner, mark each step Pass or Fail. Steps marked Fail prompt for a comment.
+5. Capture evidence: screenshots, screen recordings, or action logs from the runner.
+6. Set the overall outcome and Save and close.
+7.2 Outcome definitions
+Outcome
+Use when
+Passed
+All steps met expected results
+Failed
+One or more steps did not meet expected results; a defect is logged
+Blocked
+Cannot proceed due to an external issue (environment down, upstream defect); note the blocker
+Not Applicable
+Case does not apply for this configuration or release
+Not Run
+Not yet executed
+7.3 Logging defects from the runner
+1. On a failed step, select Create bug in the Test Runner. ADO pre-fills repro steps, build, configuration, and attachments.
+2. Set Severity, Priority, Area/Iteration, and assign to the owning developer.
+3. Confirm the bug is linked to the test case and the story.
+4. Add a clear title in the form <Module> – <Observed behavior>.
+7.4 Retesting and regression
+• When a bug is resolved, the tester re-executes the failed test point against the fixed build and updates the outcome.
+• Reset outcomes for a new cycle with Reset test to active (or create a new plan or copy the suite for the next release).
+• Run the regression suite before each release candidate.
+8. Traceability
+• Requirement → Test Case: User Story "Tested By" test case links.
+• Test Case → Bug: bugs created from the runner link automatically.
+• Test Case → Automation: associate automated tests (Playwright, Selenium, etc.) through the test case's Associated Automation tab so pipeline runs update test points.
+• Use the Requirements traceability report or query to confirm every story has linked cases and every failure has a bug.
+9. Automation Linkage
+1. Set Automation Status to Planned once a case is a candidate for automation.
+2. After scripting, link the automated test method to the test case (Associated Automation).
+3. Add a Visual Studio Test / Test Plan task in the CI/CD pipeline to run test cases by plan and suite, so results post back to the test points.
+4. Set Automation Status to Automated after the first stable run.
+10. Reporting and Metrics
+Use built-in ADO views and dashboard widgets:
+Metric
+Source
+Execution progress (Passed / Failed / Blocked / Not Run)
+Test Plans → Progress report
+Test case readiness (Design vs Ready)
+Query on Test Case State
+Requirements coverage
+Requirements traceability report
+Defect trend and aging
+Bug queries and Analytics widgets
+Automation coverage
+Query on Automation Status
+Test plan burndown
+Dashboard: Test Plan Progress widget
+Suggested dashboard: pass-rate by suite, open bugs by severity, blocked tests, requirements without tests, automation percentage.
+11. Entry and Exit Criteria
+Entry criteria
+• Story has approved acceptance criteria
+• Test cases are in Ready state and peer reviewed
+• Build is deployed to the target environment and smoke test passes
+• Test data and access are available
+Exit criteria
+• 100% of planned test points executed
+• All Priority 1 and 2 cases passed
+• No open Severity 1 or 2 defects; remaining defects triaged and accepted
+• Traceability confirmed for all in-scope stories
+• QA Lead sign-off recorded
+12. Maintenance and Governance
+• Review and prune regression cases each quarter; move obsolete cases to Closed.
+• Update test cases in the same sprint as the story change that affects them.
+• Keep tags and naming consistent; the QA Lead audits quarterly.
+• Do not delete executed test cases; close them to preserve history.
+13. Quick Reference
+Task
+Where in ADO
+Create plan / suite
+Test Plans → Test Plans → New Test Plan / New Suite
+Add test cases
+Suite → Define tab → New Test Case
+Assign testers
+Suite → Execute tab → Assign
+Run tests
+Execute tab → Run for web application
+Define configurations
+Test Plans → Configurations
+Shared steps / parameters
+Test case form → Steps → Create shared steps / Parameters
+View progress
+Test Plans → Progress report
+14. Shared Parameters
+The Parameters page in the Test Plans menu holds shared parameter sets that many test cases can reuse, instead of re-entering the same data in every case.
+1. Go to Test Plans → Parameters and select New shared parameter set.
+2. Name the set by data domain (e.g., Member Types, User Roles, Browsers) and add columns and rows.
+3. In a test case, open the Parameter values section and choose Add existing shared parameters to link the set.
+4. Update the shared set once and every linked test case picks up the change.
+Use shared parameters for data reused across suites. Use local parameters (@name in steps) for data that belongs to a single case.
+15. Runs
+The Runs page lists every test run, one per execution session, whether manual or from a pipeline.
+Use Runs to
+How
+Review past results
+Open a run to see outcomes per test, comments, and attachments
+Find a failure's history
+Filter by plan, build, or outcome, then open the failed test result
+Confirm pipeline results posted
+Check for runs from the build or release that executed automated tests
+Audit evidence
+Open a result to view screenshots, recordings, and the linked bug
+Run titles default to the plan name and build. Keep plan names meaningful so runs are easy to search.
+16. Exploratory Sessions
+Exploratory sessions captures unscripted testing alongside planned cases.
+• Use it for new features, bug hunts, and areas with thin scripted coverage.
+• Start a session against a work item or suite; ADO records screenshots, notes, and actions as you test.
+• Create bugs, tasks, or test cases directly from findings during the session.
+• Write a short charter first: Explore [area] with [data/role] to discover [risk], with a time box of 60 to 90 minutes.
+• Promote valuable findings to scripted test cases and tag them regression.
+17. Applying This to Your Current Suites
+Your plan currently shows a suite for managing urgent members at 0% run. To bring it in line with this guide:
+1. Rename the suite to <Story ID> – <Story Title> and convert it to a requirement-based suite if it is a static one.
+2. Confirm each case is in Ready state, carries a priority, and has tags such as regression or negative.
+3. Assign testers and configurations on the Execute tab so test points are generated.
+4. Move repeated login or member-lookup steps into Shared Steps, and shared data (member types, roles) into Shared Parameters.
+5. Run the smoke subset first, then the full suite, and review the Progress report daily.
