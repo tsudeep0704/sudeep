@@ -1,0 +1,12 @@
+Hi Shane, here is the written confirmation on the June HOME synthetic dataset:
+
+1. How it was generated: The data was synthetic from the start and generated independently, with no reference to real records. It was created through Tosca automation. A Tosca test sheet holds the input parameters and rules, and the data is generated from those values.
+
+	•	First names are random, produced from a pattern/regex-driven list (e.g., Clark, Jones).
+	•	Last names are random color values (Blue, Green, Yellow, etc.).
+	•	Middle name is a fixed value: "EndToEnd".
+	•	Addresses are Iowa office addresses.
+
+2. Production data elements: None. No production data was used as a source or seed at any point. I also have no access to production data or the production environment.
+
+3. Documentation: The generation logic and the input values are in the Tosca test sheet. The generated records were then validated against the eligibility criteria. I can share the Tosca test sheet and a short write-up of the methodology and validation steps
