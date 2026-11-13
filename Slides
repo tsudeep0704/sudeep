@@ -1,0 +1,46 @@
+slide 5
+
+End-to-End testing is our final validation layer, where we confirm that all systems work together Think of this as our final check that everything works together as one business process. Each system team will still test its own application, so what we're looking at here is how the systems and the MCOs interact. For HOME, that means following the data from eligibility and waiver enrollment through service authorization, claims, reporting, and into the MCO processes. Even when every application works fine on its own, things can break when information moves between them through interfaces, batch jobs, APIs, or file exchanges. We want to make sure the move from seven waivers to three waivers doesn't leave any gaps.
+
+slide 6
+Test Plan - It sets the overall testing strategy, the scope, the schedule, and who is responsible for implementation and integration. Outcome is, it gives visibility into the testing activities, key milestones, and timelines, so they can see that quality and readiness are validated before anything goes to production.
+
+Test Case Scenarios- . These describe the business workflow and the test steps we'll use to confirm the system does what the requirements say it should. outcome is, they show that the critical business processes have been thoroughly tested and are delivering the expected outcomes."
+
+
+slide 8
+"The HOME initiative touches a lot of systems, organizations, and business processes, both on the State side and across the MCOs. With that many moving parts, we need everyone testing in a coordinated way and working toward the same goals. That's what the Master Test Plan gives us: one framework for managing testing across the whole program.
+
+Each system already has its own test plan, but this one looks at the bigger picture. Our main focus is making sure the systems work together to support HOME, so we're testing complete business processes, not just individual features.
+
+That matters even more because HOME brings big business and technical changes, including moving from seven waivers to three. Those changes affect eligibility, enrollment, service planning, authorizations, claims, reporting, and the connections between systems. Testing confirms it all works correctly from start to finish.
+
+For this kind of testing, we'll need the MCOs' support alongside the State teams to make it a success."
+
+slide 9
+The Master Test Plan is more than a testing schedule. It gives us the structure to plan, run, track, and review testing across several organizations, and it makes sure everyone follows the same approach. That keeps things consistent in how we run tests, handle issues, report progress, and decide whether we're ready.
+
+HOME involves a lot of State systems, and MCOs, so the plan spells out who is responsible for what, how we communicate, and how decisions get made. It also sets up a way to keep an eye on progress and catch problems early. If a risk or an issue could affect our testing goals or timeline, there's a clear path to raise it, and leadership can see how testing is going and how ready we are.
+
+Readiness goes beyond running tests. We look at whether testing is complete, how many issues are still open, whether the environments are stable, whether the connections between systems are ready, and whether the right people have signed off. We build risk and dependency tracking into the process so we can spot trouble early.
+
+Overall, the plan defines how we measure success: how much we've tested, how issues are being resolved, whether the business processes work, and how ready we are overall. With one shared set of success measures, every organization judges progress the same way, which helps us get to a successful go-live and the HOME releases that follow.
+
+slide 12
+Our test scenarios are built around the key business processes, things like eligibility, waiver enrollment, service authorizations, claims, reporting, and the data MCOs receive. That way, testing reflects how the work actually happens day to day.
+
+Each scenario follows a member's event or a piece of data from where it starts, through each system it touches, to where it ends up downstream. That lets us confirm the information stays accurate and consistent the whole way.
+
+At each step, we check three things: the data is correct, the systems are connecting properly, and the business process gives the result it should. It's not enough for a file or message to simply arrive. The right outcome has to happen.
+
+Overall, every scenario has testing cycle, so teams know when it will be run and who needs to take part.
+
+
+slide 15
+Our test scenarios are built around the key business processes, things like eligibility, waiver enrollment, service authorizations, claims, reporting, and the data MCOs receive. That way, testing reflects how the work actually happens day to day.
+
+Each scenario follows a member's event or a piece of data from where it starts, through each system it touches, to where it ends up downstream. That lets us confirm the information stays accurate and consistent the whole way.
+
+At each step, we check three things: the data is correct, the systems are connecting properly, and the business process gives the result it should. It's not enough for a file or message to simply arrive. The right outcome has to happen.
+
+Overall, every scenario has testing cycle, so teams know when it will be run and who needs to take part.
