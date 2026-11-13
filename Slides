@@ -37,10 +37,14 @@ Overall, every scenario has testing cycle, so teams know when it will be run and
 
 
 slide 15
-Our test scenarios are built around the key business processes, things like eligibility, waiver enrollment, service authorizations, claims, reporting, and the data MCOs receive. That way, testing reflects how the work actually happens day to day.
+We're running testing in cycles, and each cycle has to wrap up before the next one starts.
 
-Each scenario follows a member's event or a piece of data from where it starts, through each system it touches, to where it ends up downstream. That lets us confirm the information stays accurate and consistent the whole way.
+We begin with Cycle 0, which takes about three weeks. Here we set up a common starting set of test data across all the systems, and every team confirms the data works and that they can restore back to this starting point. We only start once the earlier data proof-of-concept test is approved and the test environments are ready.
 
-At each step, we check three things: the data is correct, the systems are connecting properly, and the business process gives the result it should. It's not enough for a file or message to simply arrive. The right outcome has to happen.
+Cycle 1 is our first full round of testing, also about three weeks. The question it answers is whether we're ready to send data to the MCOs. This is where we apply the waiver changes to that starting data, and every test case gets run and marked pass or fail. We begin once the HOME software updates are in the test environments and Cycle 0 is done.
 
-Overall, every scenario has testing cycle, so teams know when it will be run and who needs to take part.
+Cycle 1a, about two weeks, is when the MCOs join in. Once our internal systems have fully checked out, we send the data over to the MCOs' systems. The one thing we need first is no serious issues from Cycle 1 that would affect them.
+
+Cycle 1b is our backup plan, also about two weeks. If Cycle 1 turns up big enough problems, we run it again from the beginning.
+
+Cycle 2 is the final stretch, about four weeks. We look at how things will run day to day after go-live, re-run earlier tests to make sure nothing broke, and recheck the fixes. We only get here if Cycle 1 had just minor issues, and we finish when our exit criteria are met, or when the State approves moving forward with any remaining risk
