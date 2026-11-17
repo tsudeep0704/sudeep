@@ -1,3 +1,38 @@
+
+In the attached Excel file, go to the "MCO Detailed E2E" tab. It is missing BI and ID scenarios for AD and CY.
+
+Reference rows (already done, do not modify or duplicate):
+- AD: rows 7 and 8
+- CY: rows 13 and 14
+Use these as the pattern for the expected output.
+
+Task:
+For every AD and CY scenario row where the Cycle column value is "Cycle 1" (except the reference rows above), add a BI row and an ID row directly below it.
+
+Steps for each such row:
+1. Copy the entire row into the next row. Replace only the population term (PD, HD, AIDS/HIV, or CMH) with "BI". Change nothing else in the row.
+2. Copy the original row again into the row after that. Replace the same population term with "ID".
+3. Make the replacement in every column where the term appears (scenario name, description, test steps, expected results), not just one.
+
+Result for each source row: original, then BI, then ID.
+
+Scope:
+- AD: PD, HD, AIDS/HIV get BI and ID rows.
+- CY: PD, HD, AIDS/HIV, CMH get BI and ID rows.
+
+After inserting the rows:
+- Renumber the S.No column sequentially from top to bottom so there are no gaps or duplicates.
+- Keep all formatting (fonts, borders, fills, column widths, wrap text) consistent with the original rows.
+- If any cell has formulas or references to other rows, update them so they still work.
+
+Do not change other tabs. Save the result as a new copy, and give me a summary of how many rows were added for AD and CY.
+
+
+
+
+
+
+
 slide 5
 
 End-to-End testing is our final validation layer, where we confirm that all systems work together Think of this as our final check that everything works together as one business process. Each system team will still test its own application, so what we're looking at here is how the systems and the MCOs interact. For HOME, that means following the data from eligibility and waiver enrollment through service authorization, claims, reporting, and into the MCO processes. Even when every application works fine on its own, things can break when information moves between them through interfaces, batch jobs, APIs, or file exchanges. We want to make sure the move from seven waivers to three waivers doesn't leave any gaps.
